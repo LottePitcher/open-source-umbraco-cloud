@@ -1,0 +1,29 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = null;
+	var mediaItem = Model.Value<IPublishedContent>("image");
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open Source Test Site</title>
+</head>
+<body>
+	
+	<div style="text-align:center;">
+		@if (mediaItem != null)
+		{
+			<div>
+				<img src="@mediaItem.Url()" style="width:200px;" />
+			</div>
+		}
+	</div>
+
+    @Model.Value("introText")
+
+</body>
+</html>

@@ -1,0 +1,3 @@
+[project]
+base = "src/OpenSourceTest.Site"
+csproj = "OpenSourceTest.Site.csproj"

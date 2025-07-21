@@ -1,0 +1,43 @@
+{
+  "Name": "List View - Content",
+  "EditorAlias": "Umbraco.ListView",
+  "EditorUiAlias": "Umb.PropertyEditorUi.Collection",
+  "DatabaseType": "Nvarchar",
+  "Configuration": {
+    "pageSize": 100,
+    "orderBy": "updateDate",
+    "orderDirection": "desc",
+    "layouts": [
+      {
+        "name": "Grid",
+        "collectionView": "Umb.CollectionView.Document.Grid",
+        "icon": "icon-thumbnails-small",
+        "isSystem": true,
+        "selected": true
+      },
+      {
+        "name": "List",
+        "collectionView": "Umb.CollectionView.Document.Table",
+        "icon": "icon-list",
+        "isSystem": true,
+        "selected": true
+      }
+    ],
+    "includeProperties": [
+      {
+        "alias": "updateDate",
+        "header": "Last edited",
+        "isSystem": true
+      },
+      {
+        "alias": "creator",
+        "header": "Updated by",
+        "isSystem": true
+      }
+    ]
+  },
+  "Udi": "umb://data-type/c0808dd381334e4b8ce8e2bea84a96a4",
+  "Dependencies": [],
+  "__type": "Umbraco.Deploy.Infrastructure,Umbraco.Deploy.Infrastructure.Artifacts.DataTypeArtifact",
+  "__version": "16.0.0"
+}
