@@ -1,0 +1,121 @@
+name: Deploy To Cloud
+
+on:
+  workflow_call:
+    inputs:
+      pathToWebsite:
+        required: true
+        type: string
+      csprojFile:
+        required: true
+        type: string
+
+    secrets:
+      projectId: 
+        required: true
+      umbracoCloudApiKey:
+        required: true
+      umbracoCloudJson:
+        required: true
+      deployLicenseKey:
+        required: true
+      formsLicenseKey:
+        required: true
+
+jobs:
+
+  # Do as one job as don't want save the 'real' deployment as an artifact (contains sensitive data)
+  prepAndDoDeployment:
+    name: Prep And Do Deployment
+    runs-on: ubuntu-latest
+    outputs:
+      runningDeploymentId: ${{ steps.deployment-meta.outputs.deploymentId }}
+    steps:
+      - uses: actions/checkout@v4
+
+      # Enable/disable package references in .csproj 
+      - name:  Update csproj
+        working-directory: ${{ inputs.pathToWebsite }}
+        shell: pwsh
+        run: |
+          (Get-Content '${{ inputs.csprojFile }}') -replace '<!-- <PackageReference Include="Umbraco.Cloud.Cms" Version="16.0.0" /> -->', '<PackageReference Include="Umbraco.Cloud.Cms" Version="16.0.0" />' | Set-Content '${{ inputs.csprojFile }}' 
+          (Get-Content '${{ inputs.csprojFile }}') -replace '<!--<PackageReference Include="Umbraco.Deploy.Cloud" Version="16.0.0" />-->', '<PackageReference Include="Umbraco.Deploy.Cloud" Version="16.0.0" />' | Set-Content '${{ inputs.csprojFile }}' 
+          (Get-Content '${{ inputs.csprojFile }}') -replace '<PackageReference Include="Umbraco.Deploy.OnPrem" Version="16.0.0" />', '<!--<PackageReference Include="Umbraco.Deploy.OnPrem" Version="16.0.0" />-->' | Set-Content '${{ inputs.csprojFile }}' 
+
+      # Create umbraco-cloud.json file from Secret
+      - name: Umbraco Cloud Json
+        working-directory: ${{ inputs.pathToWebsite }}
+        shell: pwsh
+        run: set-content 'umbraco-cloud.json' -value '${{ secrets.umbracoCloudJson }}' 
+
+      # Create Deploy license key file from Secret
+      - name: Deploy License Key
+        working-directory: "${{ inputs.pathToWebsite }}/umbraco/Licenses"
+        shell: pwsh
+        run: set-content 'umbracoDeploy.lic' -value '${{ secrets.deployLicenseKey }}' 
+
+      # Create Forms license key file from Secret
+      - name: Forms License Key
+        working-directory: "${{ inputs.pathToWebsite }}/umbraco/Licenses"
+        shell: pwsh
+        run: set-content 'umbracoForms.lic' -value '${{ secrets.formsLicenseKey }}' 
+
+      # switch the gitignore files so cloud does not ignore the build frontend assets
+      - name: Prepare Cloud Git Ignore
+        run: cp cloud.gitignore .gitignore
+        shell: bash
+
+      # zip everything, except what is defined in the 'cloud.zipignore'
+      - name: Zip Source Code
+        run: zip -r sources.zip . -x@cloud.zipignore
+        shell: bash
+
+      # Request to prepare a deployment
+      # - sets the commit message to be used in cloud 
+      # - supplies you with a deploymentId to be used in the rest of the process
+      - name: Create Deployment Meta
+        id: deployment-meta
+        shell: pwsh
+        run: >
+          ${{GITHUB.WORKSPACE}}/.github/powershell/APIv1/New-Deployment.ps1 
+          -ProjectId ${{ secrets.projectId }} 
+          -ApiKey ${{ secrets.umbracoCloudApiKey }} 
+          -CommitMessage "Run number ${{github.run_number}}" 
+          -PipelineVendor GITHUB
+
+      # Upload your zip file
+      - name: Post Zip
+        shell: pwsh
+        run: >
+          ${{GITHUB.WORKSPACE}}/.github/powershell/APIv1/Add-DeploymentPackage.ps1 
+          -ProjectId ${{ secrets.projectId }} 
+          -DeploymentId ${{ steps.deployment-meta.outputs.deploymentId }} 
+          -ApiKey ${{ secrets.umbracoCloudApiKey }} 
+          -FilePath sources.zip
+
+      # Request to start the deployment process in cloud
+      - name: Request Start Deployment
+        shell: pwsh
+        run: >
+          ${{GITHUB.WORKSPACE}}/.github/powershell/APIv1/Start-Deployment.ps1 
+          -ProjectId ${{ secrets.projectId }} 
+          -DeploymentId ${{ steps.deployment-meta.outputs.deploymentId }} 
+          -ApiKey ${{ secrets.umbracoCloudApiKey }}
+
+  awaitDeploymentFinished:
+    name: Await deployment to finish
+    runs-on: ubuntu-latest
+    needs: prepAndDoDeployment
+    steps:
+      - uses: actions/checkout@v4
+
+      # Poll until deployment finishes 
+      - name: Wait for deployment completed 
+        shell: pwsh
+        env: 
+          runningDeploymentId: ${{ needs.prepAndDoDeployment.outputs.runningDeploymentId }}
+        run: >
+          ${{GITHUB.WORKSPACE}}/.github/powershell/APIv1/Test-DeploymentStatus.ps1 
+          -ProjectId ${{ secrets.projectId }} 
+          -DeploymentId ${{ env.runningDeploymentId }} 
+          -ApiKey ${{ secrets.umbracoCloudApiKey }}
