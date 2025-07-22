@@ -39,8 +39,8 @@ jobs:
         shell: pwsh
         run: |
           (Get-Content '${{ inputs.csprojFile }}') -replace '<!-- <PackageReference Include="Umbraco.Cloud.Cms" Version="16.0.0" /> -->', '<PackageReference Include="Umbraco.Cloud.Cms" Version="16.0.0" />' | Set-Content '${{ inputs.csprojFile }}' 
-          (Get-Content '${{ inputs.csprojFile }}') -replace '<!--<PackageReference Include="Umbraco.Deploy.Cloud" Version="16.0.0" />-->', '<PackageReference Include="Umbraco.Deploy.Cloud" Version="16.0.0" />' | Set-Content '${{ inputs.csprojFile }}' 
-          (Get-Content '${{ inputs.csprojFile }}') -replace '<PackageReference Include="Umbraco.Deploy.OnPrem" Version="16.0.0" />', '<!--<PackageReference Include="Umbraco.Deploy.OnPrem" Version="16.0.0" />-->' | Set-Content '${{ inputs.csprojFile }}' 
+          (Get-Content '${{ inputs.csprojFile }}') -replace '<!-- <PackageReference Include="Umbraco.Deploy.Cloud" Version="16.0.0" /> -->', '<PackageReference Include="Umbraco.Deploy.Cloud" Version="16.0.0" />' | Set-Content '${{ inputs.csprojFile }}' 
+          (Get-Content '${{ inputs.csprojFile }}') -replace '<PackageReference Include="Umbraco.Deploy.OnPrem" Version="16.0.0" />', '<!-- <PackageReference Include="Umbraco.Deploy.OnPrem" Version="16.0.0" /> -->' | Set-Content '${{ inputs.csprojFile }}' 
 
       # Create umbraco-cloud.json file from Secret
       - name: Umbraco Cloud Json

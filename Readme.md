@@ -13,7 +13,7 @@ I'll post a link to a blog on how I set all this up in case you want to do the s
 1. Fork this repository
 1. Clone locally
 1. Open `OpenSourceTest.sln` in Rider|Visual Studio and start the website project
-1. In the browser click the `Skip restore and open Umbraco` link
+1. In the browser click the `Open Umbraco without restore` link
 1. Log in using `community@umbraco.com` and `community!`
 1. Settings section > Deploy dashboard > press the `Update Umbraco schema from data files` button
 1. Content section > Click ... top-left > select the `Import` option
