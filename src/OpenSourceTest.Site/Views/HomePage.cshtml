@@ -1,0 +1,16 @@
+﻿@using Umbraco.Cms.Web.Common.PublishedModels;
+@inherits Umbraco.Cms.Web.Common.Views.UmbracoViewPage
+@{
+	Layout = "_Layout.cshtml";
+
+	var mediaItem = Model.Value<IPublishedContent>("image");
+}
+
+<div style="text-align:center;margin-top:50px;">
+	@if (mediaItem != null)
+	{
+		<img src="@mediaItem.Url()" style="width:200px;" />
+	}
+</div>
+
+@Model.Value("introText")
