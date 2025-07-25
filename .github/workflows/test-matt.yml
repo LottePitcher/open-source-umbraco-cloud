@@ -18,9 +18,7 @@ jobs:
         shell: pwsh
         run: |
           $content = Get-Content 'OpenSourceTest.Site.csproj' -Raw
-
-          echo $content
-          
+         
           # Enable Umbraco.Cloud.Cms (uncomment)
           $content = $content -replace '(?s)<!--\s*<PackageReference\s+(?=.*Include\s*=\s*"Umbraco\.Cloud\.Cms")(?=.*Version\s*=\s*"([^"]*)")[^>]*/?>\s*-->', '<PackageReference Include="Umbraco.Cloud.Cms" Version="$1" />'
           
