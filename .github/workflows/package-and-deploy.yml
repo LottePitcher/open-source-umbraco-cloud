@@ -34,14 +34,23 @@ jobs:
       - uses: actions/checkout@v4
 
       # Enable/disable package references in .csproj 
-      - name:  Update csproj
+      - name: Update csproj
         working-directory: ${{ inputs.pathToWebsite }}
         shell: pwsh
         run: |
-          (Get-Content '${{ inputs.csprojFile }}') -replace '<!-- <PackageReference Include="Umbraco.Cloud.Cms" Version="16.0.0" /> -->', '<PackageReference Include="Umbraco.Cloud.Cms" Version="16.0.0" />' | Set-Content '${{ inputs.csprojFile }}' 
-          (Get-Content '${{ inputs.csprojFile }}') -replace '<!-- <PackageReference Include="Umbraco.Deploy.Cloud" Version="16.0.0" /> -->', '<PackageReference Include="Umbraco.Deploy.Cloud" Version="16.0.0" />' | Set-Content '${{ inputs.csprojFile }}' 
-          (Get-Content '${{ inputs.csprojFile }}') -replace '<PackageReference Include="Umbraco.Deploy.OnPrem" Version="16.0.0" />', '<!-- <PackageReference Include="Umbraco.Deploy.OnPrem" Version="16.0.0" /> -->' | Set-Content '${{ inputs.csprojFile }}' 
-
+          $content = Get-Content '${{ inputs.csprojFile }}' -Raw
+          
+          # Enable Umbraco.Cloud.Cms (uncomment)
+          $content = $content -replace '(?s)<!--\s*<PackageReference\s+(?=.*Include\s*=\s*"Umbraco\.Cloud\.Cms")(?=.*Version\s*=\s*"([^"]*)")[^>]*/?>\s*-->', '<PackageReference Include="Umbraco.Cloud.Cms" Version="$1" />'
+          
+          # Enable Umbraco.Deploy.Cloud (uncomment)
+          $content = $content -replace '(?s)<!--\s*<PackageReference\s+(?=.*Include\s*=\s*"Umbraco\.Deploy\.Cloud")(?=.*Version\s*=\s*"([^"]*)")[^>]*/?>\s*-->', '<PackageReference Include="Umbraco.Deploy.Cloud" Version="$1" />'
+          
+          # Disable Umbraco.Deploy.OnPrem (comment out)
+          $content = $content -replace '(?s)<PackageReference\s+(?=.*Include\s*=\s*"Umbraco\.Deploy\.OnPrem")(?=.*Version\s*=\s*"([^"]*)")[^>]*/?>', '<!-- <PackageReference Include="Umbraco.Deploy.OnPrem" Version="$1" /> -->'
+          
+          Set-Content '${{ inputs.csprojFile }}' $content
+          
       # Create umbraco-cloud.json file from Secret
       - name: Umbraco Cloud Json
         working-directory: ${{ inputs.pathToWebsite }}
