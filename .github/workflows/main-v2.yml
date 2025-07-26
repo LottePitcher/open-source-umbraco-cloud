@@ -20,9 +20,9 @@ jobs:
   #     targetEnvironmentAlias: ${{ vars.TARGET_ENVIRONMENT_ALIAS }}
 
   # Prepare source code ready for deployment
-  cloud-preflight:
+  cloud-predeploy:
     name: "Prepare Source for Deployment"
-    uses: ./.github/workflows/jobs/cloud-preflight.yml
+    uses: ./.github/workflows/jobs/cloud-predeploy.yml
     with:
       pathToWebsite: "src/OpenSourceTest.Site"
       csprojFile: "OpenSourceTest.Site.csproj"
@@ -35,7 +35,7 @@ jobs:
   cloud-artifact:
     name: "Prepare and Upload Artifact"
     uses: ./.github/workflows/jobs/cloud-artifact.yml
-    needs: cloud-preflight
+    needs: cloud-predeploy
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
