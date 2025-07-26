@@ -17,9 +17,9 @@ I'll post a link to a blog on how I set all this up in case you want to do the s
 1. Log in using `community@umbraco.com` and `community!`
 1. Settings section > Deploy dashboard > press the `Update Umbraco schema from data files` button
 1. Content section > Click ... top-left > select the `Import` option
-1. Select `\content-import\20250721-home.zip`, leave all options ticked and press `Import`
+1. Select the file with the newest date in the `\content-import` folder, leave all options ticked and press `Import`
+    1. If it complains about signatures, try clearing the signatures in Settings section > Deploy dashboard > press the `Clear Signatures` button
 1. Confirm that now have a working home page at `https://localhost:44390`
-1. If there are other files in the `\content-import` folder, import each one separately in alphabetical (i.e. date) order so that you have all the other content that people have contributed thus far. In a real project, we would recreate the initial import zip every so often and delete the separate ones.
 
 ## Contributing Back
 
