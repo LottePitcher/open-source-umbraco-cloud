@@ -1,0 +1,14 @@
+{
+  "id": "OpenSourceTest.MyExtension",
+  "name": "OpenSourceTest.MyExtension",
+  "version": "0.0.0",
+  "allowTelemetry": true,
+  "extensions": [
+    {
+      "name": "Open Source Test My Extension Bundle",
+      "alias": "OpenSourceTest.MyExtension.Bundle",
+      "type": "bundle",
+      "js": "/App_Plugins/OpenSourceTestMyExtension/open-source-test-my-extension.js"
+    }
+  ]
+}
