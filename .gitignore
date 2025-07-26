@@ -429,3 +429,6 @@ healthchecksdb
 
 # Umbraco.Deploy.OnPrem creates this file when running locally - file not needed in Cloud repo
 **/TriggerDeploy.ps1
+
+# Don't commit the files generated in the extension project
+src/OpenSourceTest.MyExtension/wwwroot/

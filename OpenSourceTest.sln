@@ -7,21 +7,28 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{7DEA792A-897
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenSourceTest.Site", "src\OpenSourceTest.Site\OpenSourceTest.Site.csproj", "{0CDCB4DE-F88D-48B0-B592-9885A8DC7246}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenSourceTest.MyExtension", "src\OpenSourceTest.MyExtension\OpenSourceTest.MyExtension.csproj", "{B738DE28-13B7-410F-5FED-B8C76429CF25}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
-	EndGlobalSection
-	GlobalSection(SolutionProperties) = preSolution
-		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0CDCB4DE-F88D-48B0-B592-9885A8DC7246}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{0CDCB4DE-F88D-48B0-B592-9885A8DC7246}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0CDCB4DE-F88D-48B0-B592-9885A8DC7246}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0CDCB4DE-F88D-48B0-B592-9885A8DC7246}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B738DE28-13B7-410F-5FED-B8C76429CF25}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B738DE28-13B7-410F-5FED-B8C76429CF25}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B738DE28-13B7-410F-5FED-B8C76429CF25}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B738DE28-13B7-410F-5FED-B8C76429CF25}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{0CDCB4DE-F88D-48B0-B592-9885A8DC7246} = {7DEA792A-8972-494E-A996-127FE1D669B8}
+		{B738DE28-13B7-410F-5FED-B8C76429CF25} = {7DEA792A-8972-494E-A996-127FE1D669B8}
 	EndGlobalSection
 EndGlobal
