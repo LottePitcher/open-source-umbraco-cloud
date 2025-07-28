@@ -5,7 +5,7 @@ on:
     branches:
       - main
       - v2-api
-  workflow_dispatch:
+  workflow_dispatch: 
 
 jobs:
   set-env:
