@@ -58,10 +58,10 @@ jobs:
           Set-Content '${{ inputs.csprojFile }}' $content
           
       # Create umbraco-cloud.json file from Secret
-      - name: Umbraco Cloud Json
-        working-directory: ${{ inputs.pathToWebsite }}
-        shell: pwsh
-        run: set-content 'umbraco-cloud.json' -value '${{ secrets.umbracoCloudJson }}' 
+      # - name: Umbraco Cloud Json
+      #   working-directory: ${{ inputs.pathToWebsite }}
+      #   shell: pwsh
+      #   run: set-content 'umbraco-cloud.json' -value '${{ secrets.umbracoCloudJson }}' 
 
       # Create Deploy license key file from Secret
       - name: Deploy License Key
