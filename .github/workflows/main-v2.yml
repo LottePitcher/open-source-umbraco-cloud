@@ -33,27 +33,20 @@ jobs:
   #   with:
   #     targetEnvironmentAlias: ${{  env.TARGET_ENVIRONMENT_ALIAS }}
 
-  # Prepare source code ready for deployment
-  cloud-predeploy:
-    name: "Prepare Source for Deployment"
-    needs: set-env
-    uses: ./.github/workflows/cloud-predeploy.yml
+  # Pack and upload the deployment Artifact
+  cloud-artifact:
+    name: "Prepare and Upload Artifact"
+    needs: [set-env]
+    uses: ./.github/workflows/cloud-artifact.yml
     with:
       pathToWebsite: "src/OpenSourceTest.Site"
       csprojFile: "OpenSourceTest.Site.csproj"
     secrets:
+      projectId: ${{ secrets.PROJECT_ID }}
+      umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
       umbracoCloudJson: ${{ secrets.UMBRACO_CLOUD_JSON }}
       deployLicenseKey: ${{ secrets.DEPLOY_LICENSE_KEY }}
       formsLicenseKey: ${{ secrets.FORMS_LICENSE_KEY }}
-
-  # Pack and upload the deployment Artifact
-  cloud-artifact:
-    name: "Prepare and Upload Artifact"
-    needs: cloud-predeploy
-    uses: ./.github/workflows/cloud-artifact.yml
-    secrets:
-      projectId: ${{ secrets.PROJECT_ID }}
-      umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
 
   # Deploy to Umbraco Cloud
   cloud-deployment:
