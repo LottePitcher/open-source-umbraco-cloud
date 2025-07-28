@@ -13,7 +13,7 @@ jobs:
   # Get changes from cloud
   # cloud-sync:
   #   name: "Umbraco Cloud Sync"
-  #   uses: ./.github/workflows/jobs/cloud-sync.yml
+  #   uses: ./.github/workflows/cloud-sync.yml
   #   secrets:
   #     projectId: ${{ secrets.PROJECT_ID }}
   #     umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
@@ -23,7 +23,7 @@ jobs:
   # Prepare source code ready for deployment
   cloud-predeploy:
     name: "Prepare Source for Deployment"
-    uses: ./.github/workflows/jobs/cloud-predeploy.yml
+    uses: ./.github/workflows/cloud-predeploy.yml
     with:
       pathToWebsite: "src/OpenSourceTest.Site"
       csprojFile: "OpenSourceTest.Site.csproj"
@@ -35,7 +35,7 @@ jobs:
   # Pack and upload the deployment Artifact
   cloud-artifact:
     name: "Prepare and Upload Artifact"
-    uses: ./.github/workflows/jobs/cloud-artifact.yml
+    uses: ./.github/workflows/cloud-artifact.yml
     needs: cloud-predeploy
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
@@ -48,7 +48,7 @@ jobs:
   cloud-deployment:
     name: "Deploy to Cloud"
     needs: cloud-artifact
-    uses: ./.github/workflows/jobs/cloud-deployment.yml
+    uses: ./.github/workflows/cloud-deployment.yml
     with:
       artifactId: ${{ needs.cloud-artifact.outputs.artifactId }}
       targetEnvironmentAlias: ${{ vars.TARGET_ENVIRONMENT_ALIAS }}
