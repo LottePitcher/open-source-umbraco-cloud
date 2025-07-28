@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - v2-api
   workflow_dispatch: # Allow manual triggering of the workflow
 
 jobs:
