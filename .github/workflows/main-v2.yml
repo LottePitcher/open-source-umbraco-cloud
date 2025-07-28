@@ -1,14 +1,26 @@
-name: pipeline # You can add your own name for the pipeline here
+name: pipeline
 
-# Trigger when committing to main branch
 on:
   push:
     branches:
       - main
       - v2-api
-  workflow_dispatch: # Allow manual triggering of the workflow
+  workflow_dispatch:
 
 jobs:
+  set-env:
+    runs-on: ubuntu-latest
+    outputs:
+      targetEnv: ${{ steps.set-env-main.outputs.value || steps.set-env-staging.outputs.value }}
+    steps:
+      - name: Set ENV for main
+        id: set-env-main
+        if: github.ref == 'refs/heads/main'
+        run: echo "value=live" >> $GITHUB_OUTPUT
+      - name: Set ENV for v2-api
+        id: set-env-staging
+        if: github.ref == 'refs/heads/v2-api'
+        run: echo "value=stage" >> $GITHUB_OUTPUT
 
   # Get changes from cloud
   # cloud-sync:
@@ -18,11 +30,12 @@ jobs:
   #     projectId: ${{ secrets.PROJECT_ID }}
   #     umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
   #   with:
-  #     targetEnvironmentAlias: ${{ vars.TARGET_ENVIRONMENT_ALIAS }}
+  #     targetEnvironmentAlias: ${{  env.TARGET_ENVIRONMENT_ALIAS }}
 
   # Prepare source code ready for deployment
   cloud-predeploy:
     name: "Prepare Source for Deployment"
+    needs: set-env
     uses: ./.github/workflows/cloud-predeploy.yml
     with:
       pathToWebsite: "src/OpenSourceTest.Site"
@@ -35,25 +48,20 @@ jobs:
   # Pack and upload the deployment Artifact
   cloud-artifact:
     name: "Prepare and Upload Artifact"
-    uses: ./.github/workflows/cloud-artifact.yml
     needs: cloud-predeploy
+    uses: ./.github/workflows/cloud-artifact.yml
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
 
   # Deploy to Umbraco Cloud
-  # ####
-  # you can edit the variables noBuildAndRestore and skipVersionCheck    
-  # use 0 for false and 1 for true
   cloud-deployment:
     name: "Deploy to Cloud"
-    needs: cloud-artifact
+    needs: [set-env, cloud-artifact]
     uses: ./.github/workflows/cloud-deployment.yml
     with:
       artifactId: ${{ needs.cloud-artifact.outputs.artifactId }}
-      targetEnvironmentAlias: ${{ vars.TARGET_ENVIRONMENT_ALIAS }}
-      noBuildAndRestore: 0
-      skipVersionCheck: 0
+      targetEnvironmentAlias: ${{ needs.set-env.outputs.targetEnv }}
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
