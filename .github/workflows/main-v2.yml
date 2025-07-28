@@ -9,6 +9,7 @@ on:
 
 jobs:
   set-env:
+    name: "Set Target Environment from Branch"
     runs-on: ubuntu-latest
     outputs:
       targetEnv: ${{ steps.set-env-main.outputs.value || steps.set-env-staging.outputs.value }}
