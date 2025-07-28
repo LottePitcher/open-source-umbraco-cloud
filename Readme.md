@@ -17,7 +17,9 @@ I'll post a link to a blog on how I set all this up in case you want to do the s
 1. Log in using `community@umbraco.com` and `community!`
 1. Settings section > Deploy dashboard > press the `Update Umbraco schema from data files` button
 1. Content section > Click ... top-left > select the `Import` option
-1. Select the file with the newest date in the `\content-import` folder, leave all options ticked and press `Import`
+1. Click to upload and navigate to the `content-import` folder off root 
+1. Import each file separately working in alphabetical (i.e. date) order: 
+    1. Leave all options ticked and press `Import`
     1. If it complains about signatures, try clearing the signatures in Settings section > Deploy dashboard > press the `Clear Signatures` button
 1. Confirm that now have a working home page at `https://localhost:44390`
 
