@@ -5,6 +5,8 @@ on:
     branches:
       - main
       - v2-api
+    tags:
+      - live
   workflow_dispatch: 
 
 jobs:
@@ -12,15 +14,15 @@ jobs:
     name: "Set Target Environment from Branch"
     runs-on: ubuntu-latest
     outputs:
-      targetEnv: ${{ steps.set-env-main.outputs.value || steps.set-env-staging.outputs.value }}
+      targetEnv: ${{ steps.set-env-live.outputs.value || steps.set-env-stage.outputs.value }}
     steps:
-      - name: Set ENV for main
-        id: set-env-main
-        if: github.ref == 'refs/heads/main'
+      - name: Set ENV for live tag
+        id: set-env-live
+        if: startsWith(github.ref, 'refs/tags/live')
         run: echo "value=live" >> $GITHUB_OUTPUT
-      - name: Set ENV for v2-api
-        id: set-env-staging
-        if: github.ref == 'refs/heads/v2-api'
+      - name: Set ENV for all other occasions (default to stage)
+        id: set-env-stage
+        if: ${{ !startsWith(github.ref, 'refs/tags/live') }}
         run: echo "value=stage" >> $GITHUB_OUTPUT
 
   # Get changes from cloud
