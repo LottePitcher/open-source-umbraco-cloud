@@ -34,13 +34,20 @@
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
-  <!-- Restore and build Client files -->
-  <Target Name="RestoreClient" Inputs="Client\package.json;Client\package-lock.json" Outputs="Client\node_modules\.package-lock.json">
+  <!-- Restore and build Client files outside of Cloud environments -->
+  <Target Name="RestoreClient"
+          Inputs="Client\package.json;Client\package-lock.json" 
+          Outputs="Client\node_modules\.package-lock.json">
     <Message Importance="high" Text="Restoring Client NPM packages..." />
     <Exec Command="npm i" WorkingDirectory="Client" />
   </Target>
 
-  <Target Name="BuildClient" BeforeTargets="AssignTargetPaths" DependsOnTargets="RestoreClient" Inputs="@(ClientAssetsInputs)" Outputs="$(IntermediateOutputPath)client.complete.txt">
+  <Target Name="BuildClient" 
+          BeforeTargets="AssignTargetPaths" 
+          DependsOnTargets="RestoreClient" 
+          Inputs="@(ClientAssetsInputs)" 
+          Outputs="$(IntermediateOutputPath)client.complete.txt"
+          Condition="!('$(UMBRACO__CLOUD__ISRUNNINGONCLOUD)' == 'true' OR '$(ENVIRONMENT__PROJECTID)' != '')">
     <Message Importance="high" Text="Executing Client NPM build script..." />
     <Exec Command="npm run build" WorkingDirectory="Client" />
     <ItemGroup>

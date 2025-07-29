@@ -9,6 +9,9 @@ on:
       csprojFile:
         required: true
         type: string
+      pathToFrontendClient:
+        required: true
+        type: string
 
     secrets:
       projectId: 
@@ -72,6 +75,20 @@ jobs:
       # switch the gitignore files so cloud does not ignore the build frontend assets
       - name: Prepare Cloud Git Ignore
         run: cp cloud.gitignore .gitignore
+        shell: bash
+
+      # Setup Node.js for frontend build
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22.x'
+          cache: 'npm'
+          cache-dependency-path: '${{ inputs.pathToFrontendClient }}/package-lock.json'
+
+      # build the frontend assets
+      - name: Build frontend assets
+        working-directory: ${{ inputs.pathToFrontendClient }}
+        run: npm ci && npm run build --if-present
         shell: bash
 
       # zip everything, except what is defined in the 'cloud.zipignore'
