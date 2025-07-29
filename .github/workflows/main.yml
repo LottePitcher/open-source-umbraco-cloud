@@ -8,9 +8,6 @@ on:
   workflow_dispatch: # Allow manual triggering of the workflow
 
 jobs:
-
-  # Intentionally NOT syncing from Cloud as all patches/updates etc being done manually on GitHub repo
-
   # Package and Deploy to Umbraco Cloud (without saving the artifact as contains sensitive data)
   cloud-deployment:
     name: "Deploy to Cloud"
@@ -24,3 +21,4 @@ jobs:
     with:
       pathToWebsite: "src/OpenSourceTest.Site"
       csprojFile: "OpenSourceTest.Site.csproj"
+      pathToFrontendClient: "src/OpenSourceTest.MyExtension/Client"
