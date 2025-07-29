@@ -1,4 +1,4 @@
-name: Deploy To Cloud
+# called by main.yml
 
 on:
   workflow_call:
