@@ -98,19 +98,11 @@ jobs:
         shell: bash
 
       # zip everything, except what is defined in the 'cloud.zipignore'
-      - name: Prepare Cloud Git Ignore and Zip Source Code
+      - name: Zip Source Code
         run: |
           echo "Packing artifact for upload"
           zip -r sources.zip . -x@cloud.zipignore
         shell: bash
-
-      # store artifact for easy debug if needed
-      # - name: Store artifact in pipeline
-      #   uses: actions/upload-artifact@v4
-      #   with:
-      #     name: source-artifact
-      #     path: ${{GITHUB.WORKSPACE}}/sources.zip
-      #     retention-days: 1
 
       # Upload your zipped artifact
       - name: Post Zipped Artifact

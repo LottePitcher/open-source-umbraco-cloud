@@ -4,7 +4,6 @@ on:
   push:
     branches:
       - main
-      - v2-api
   release:
     types: [published]
   workflow_dispatch: 
