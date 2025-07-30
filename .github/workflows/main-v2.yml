@@ -43,6 +43,7 @@ jobs:
     with:
       pathToWebsite: "src/OpenSourceTest.Site"
       csprojFile: "OpenSourceTest.Site.csproj"
+      pathToFrontendClient: "src/OpenSourceTest.MyExtension/Client"
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
