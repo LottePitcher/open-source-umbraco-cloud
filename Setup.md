@@ -47,7 +47,7 @@
 
 So you now have a working local site running the latest codebase, with no sensitive files. You can now commit your changes, push to GitHub, share your code with the world and even accept pull requests from contributors 🎉
 
-### But two questions remain:
+**But two questions remain:**
 
 1. How do changes get deployed back to the Cloud site? This is obviously rather fundamental as you should be working in this GitHub repository from this point onwards!  
 
