@@ -6,6 +6,7 @@ on:
       - main
   workflow_dispatch: 
 
+jobs:
   # Pack and upload the deployment Artifact
   cloud-artifact:
     name: "Prepare and Upload Artifact"
