@@ -55,7 +55,7 @@ So you now have a working local site running the latest codebase, with no sensit
 
 ## Getting Changes Back to Cloud
 
-We're using a GitHub Action to do this.
+We're using a GitHub Action that uses the V2 Umbraco Cloud API endpoints.
 
 In your GitHub repository go to Settings > Security > Secrets and Variables > Actions. There are two tabs, one for Secrets and one for Variables.
 
@@ -69,27 +69,36 @@ On the Secrets tab, create the following Repository Secrets:
 
 Now do the following updates to your repository:
 
-1. Copy the Cloud API v1 powershell scripts from [here](.github/powershell/APIv1) into the same folder location in your repository (.github\powershell\APIv1)  
+1. Copy the Cloud API v1 powershell scripts from [here](.github/powershell/APIv2) into the same folder location in your repo (.github\powershell\APIv2)  
 
-1. Copy [`main.yml`](.github/workflows/main.yml) and [`package-and-deploy.yml`](.github/workflows/package-and-deploy.yml) into the same folder location in your repository (.github\workflows) 
+1. Copy all the .yml files from [here](.github/workflows) into the same folder location in your repo (.github\workflows)
 
-1. Update your `main.yml` file and set the `pathToWebsite` and ` csProjFile` parameters to what your project needs  
+1. Update the `cloud-artifact` job in `main-v2.yml`:
+
+   - Set the `pathToWebsite` parameter
+   - Set the `csProjFile` parameter
+   - Set the `pathToFrontendClient` parameter (see ** Note below)
+
+1. Update the `cloud-deployment` job in `main-v2.yml`:
+
+   - Set the `targetEnvironmentAlias` to the left-most main environment alias (check this in the Cloud Portal > Configuration > Advanced > Umbraco CI/CD Flow > CI/CD Environment Targets). Of course you may prefer to switch to use a Repository variable here.
 
 1. In the root of your repository add the `cloud.zipignore` file that you can copy from [here](cloud.zipignore) 
  
 1. Copy your `.gitignore` file in the root of your repository and rename the copy to be `cloud.gitignore`  
 
-1. Then edit `cloud.gitignore` and remove the “CUSTOM rules” section that you added earlier
+1. Edit `cloud.gitignore` and remove the “CUSTOM rules” section that you added earlier
 
-Now you have a GitHub Action that will push to Cloud whenever the `main` branch is updated, or when it’s manually triggered (via the GitHub website Actions tab). If you’d prefer to only trigger a deployment manually, at least to start with, update the `on` section at the top of `main.yml`.
+> [!NOTE]
+> ** If you do NOT have a separate project which needs a npm build task then delete the `pathToFrontendClient` line, and update `cloud-artifact.yml` and delete the `Setup Node.js` and `Build frontend assets` steps.
+
+Now you have a GitHub Action that will push to Cloud whenever the `main` branch is updated, or when it’s manually triggered (via the GitHub website Actions tab). 
 
 You will probably now want to create a new branch called `develop` and set this as your default branch. But your branching strategy is up to you, just make sure that you understand when your GitHub action is going to run!
 
-We’re [working on](issues/1) switching to the Cloud version 2 API endpoints, as then you would be able to specify which target environment you want to deploy to (amongst other reasons). 
+### Debugging
 
-If you have more than one environment then the version 1 API endpoints will update the “left-most” environment, and then you use the Cloud portal to update the Live site. 
-
-If you only have only one environment then the GitHub action will try to deploy directly to live. So please be warned that if there’s something wrong with the GitHub action it might take down your live site. If that happens (and it did for me!) then I debugged this by looking at the commit that was made to the Cloud repository during the deployment. The website `.csproj` is a good place to check first!
+Please be warned that if there’s something wrong with the GitHub action, it might take down your target site. If that happens (and it did for me several times whilst working on it!) then I debugged by looking at the commit that was made to the Cloud repository during the deployment. The website `.csproj` is a good place to check first!
 
 ## Sharing Content and Media Updates
 
