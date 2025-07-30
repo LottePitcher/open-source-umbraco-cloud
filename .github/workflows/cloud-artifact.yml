@@ -1,20 +1,22 @@
-# called by main.yml
+name: Prepare and Upload Artifact
 
 on:
   workflow_call:
     inputs:
-      pathToWebsite:
-        required: true
+      newSha:
+        required: false
         type: string
-      csprojFile:
-        required: true
+      pathToWebsite:
+        required: false
         type: string
       pathToFrontendClient:
-        required: true
+        required: false
         type: string
-
+      csprojFile:
+        required: false
+        type: string
     secrets:
-      projectId: 
+      projectId:
         required: true
       umbracoCloudApiKey:
         required: true
@@ -24,17 +26,21 @@ on:
         required: true
       formsLicenseKey:
         required: true
+    outputs:
+      artifactId:
+        description: 'The Id of the uploaded artifact'
+        value: ${{ jobs.prepareDeployment.outputs.artifactId }}
 
 jobs:
-
-  # Do as one job as don't want save the 'real' deployment as an artifact (contains sensitive data)
-  prepAndDoDeployment:
-    name: Prep And Do Deployment
+  prepareDeployment:
+    name: Prepare Artifact to cloud
     runs-on: ubuntu-latest
     outputs:
-      runningDeploymentId: ${{ steps.deployment-meta.outputs.deploymentId }}
+      artifactId: ${{ steps.upload-artifact.outputs.artifactId }}
     steps:
       - uses: actions/checkout@v4
+        with:
+          ref: ${{ inputs.newSha }}
 
       # Enable/disable package references in .csproj 
       - name: Update csproj
@@ -76,7 +82,7 @@ jobs:
       - name: Prepare Cloud Git Ignore
         run: cp cloud.gitignore .gitignore
         shell: bash
-
+        
       # Setup Node.js for frontend build
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -93,55 +99,20 @@ jobs:
 
       # zip everything, except what is defined in the 'cloud.zipignore'
       - name: Zip Source Code
-        run: zip -r sources.zip . -x@cloud.zipignore
+        run: |
+          echo "Packing artifact for upload"
+          zip -r sources.zip . -x@cloud.zipignore
         shell: bash
 
-      # Request to prepare a deployment
-      # - sets the commit message to be used in cloud 
-      # - supplies you with a deploymentId to be used in the rest of the process
-      - name: Create Deployment Meta
-        id: deployment-meta
+      # Upload your zipped artifact
+      - name: Post Zipped Artifact
+        id: upload-artifact
         shell: pwsh
         run: >
-          ${{GITHUB.WORKSPACE}}/.github/powershell/APIv1/New-Deployment.ps1 
+          ${{GITHUB.WORKSPACE}}/.github/powershell/APIv2/Add-DeploymentArtifact.ps1 
           -ProjectId ${{ secrets.projectId }} 
           -ApiKey ${{ secrets.umbracoCloudApiKey }} 
-          -CommitMessage "Run number ${{github.run_number}}" 
+          -FilePath ${{ GITHUB.WORKSPACE }}/sources.zip
+          -Description "Artifact for ${{github.run_number}}"
+          -Version "${{github.run_number}}"
           -PipelineVendor GITHUB
-
-      # Upload your zip file
-      - name: Post Zip
-        shell: pwsh
-        run: >
-          ${{GITHUB.WORKSPACE}}/.github/powershell/APIv1/Add-DeploymentPackage.ps1 
-          -ProjectId ${{ secrets.projectId }} 
-          -DeploymentId ${{ steps.deployment-meta.outputs.deploymentId }} 
-          -ApiKey ${{ secrets.umbracoCloudApiKey }} 
-          -FilePath sources.zip
-
-      # Request to start the deployment process in cloud
-      - name: Request Start Deployment
-        shell: pwsh
-        run: >
-          ${{GITHUB.WORKSPACE}}/.github/powershell/APIv1/Start-Deployment.ps1 
-          -ProjectId ${{ secrets.projectId }} 
-          -DeploymentId ${{ steps.deployment-meta.outputs.deploymentId }} 
-          -ApiKey ${{ secrets.umbracoCloudApiKey }}
-
-  awaitDeploymentFinished:
-    name: Await deployment to finish
-    runs-on: ubuntu-latest
-    needs: prepAndDoDeployment
-    steps:
-      - uses: actions/checkout@v4
-
-      # Poll until deployment finishes 
-      - name: Wait for deployment completed 
-        shell: pwsh
-        env: 
-          runningDeploymentId: ${{ needs.prepAndDoDeployment.outputs.runningDeploymentId }}
-        run: >
-          ${{GITHUB.WORKSPACE}}/.github/powershell/APIv1/Test-DeploymentStatus.ps1 
-          -ProjectId ${{ secrets.projectId }} 
-          -DeploymentId ${{ env.runningDeploymentId }} 
-          -ApiKey ${{ secrets.umbracoCloudApiKey }}
