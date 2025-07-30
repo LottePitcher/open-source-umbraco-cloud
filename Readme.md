@@ -2,9 +2,11 @@
 
 I have an Umbraco (16) Cloud site running at https://opensourcecloud.lotte.dev. *Or least I do for now, I won't keep this site running for ever!*
 
-I'm using this public GitHub repository as the "working" directory for that project: all development on the site should be done here, not committed directly to the Cloud git repo. There's a GitHub Action that, fingers crossed, gets everything it needs from GitHub Secrets to push to Cloud and update the live site!
+I'm using this public GitHub repository as the "working" directory for that project: all development on the site should be done here, not committed directly to the Cloud git repo. There's a GitHub Action that gets everything it needs from GitHub Secrets to push to Cloud and update the live site!
 
-*BTW I've written [this blog post](https://dev.to/lottepitcher/open-sourcing-an-umbraco-cloud-site-mjj) explaining how I set all this up in case you want to give it a go yourself.*
+*BTW I've written [this blog post](https://dev.to/lottepitcher/open-sourcing-an-umbraco-cloud-site-mjj) explaining the background to this project*
+
+If you want to try it yourself then follow the steps defined in [Setup.md](Setup.md).
 
 But first we'd love people to try running the site locally and contributing back - see the steps below. Would a workflow like this enable the community to contribute to the new Umbraco Community site that we're currently building on Cloud?
 
@@ -27,7 +29,7 @@ But first we'd love people to try running the site locally and contributing back
 
 I've raised issues for specific things I'd like people to test. But you're welcome to try whatever you like to have a go at the workflow contribution yourself.
 
-In your fork, please work in a branch and a raise a pull request targetting the default branch of `develop`.
+In your fork, work in a new branch and a raise a pull request targetting the default branch of `develop`.
 
 If you're creating new Document Types, Templates or Data Types you should see a corresponding .uda file for each item in your list of changes to commit. Make sure you commit those!
 
