@@ -1,4 +1,4 @@
-name: pipeline
+name: Deploy to Cloud (v2 API) 
 
 on:
   push:
