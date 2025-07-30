@@ -9,6 +9,9 @@ on:
       pathToWebsite:
         required: false
         type: string
+      pathToFrontendClient:
+        required: false
+        type: string
       csprojFile:
         required: false
         type: string
