@@ -55,7 +55,7 @@ So you now have a working local site running the latest codebase, with no sensit
 
 ## Getting Changes Back to Cloud
 
-We're using a GitHub Action that uses the V2 Umbraco Cloud API endpoints.
+We're using a GitHub Action that uses the Cloud v2 API endpoints.
 
 In your GitHub repository go to Settings > Security > Secrets and Variables > Actions. There are two tabs, one for Secrets and one for Variables.
 
@@ -69,7 +69,7 @@ On the Secrets tab, create the following Repository Secrets:
 
 Now do the following updates to your repository:
 
-1. Copy the Cloud API v1 powershell scripts from [here](.github/powershell/APIv2) into the same folder location in your repo (.github\powershell\APIv2)  
+1. Copy the Cloud API v2 powershell scripts from [here](.github/powershell/APIv2) into the same folder location in your repo (.github\powershell\APIv2)  
 
 1. Copy all the .yml files from [here](.github/workflows) into the same folder location in your repo (.github\workflows)
 
