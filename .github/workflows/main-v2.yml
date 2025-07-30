@@ -27,32 +27,6 @@ jobs:
             echo "environment=stage" >> $GITHUB_OUTPUT
           fi
 
-jobs:
-  set-env:
-    name: "Set Target Environment from Branch"
-    runs-on: ubuntu-latest
-    outputs:
-      targetEnv: ${{ steps.set-env-live.outputs.value || steps.set-env-stage.outputs.value }}
-    steps:
-      - name: Set ENV for live tag
-        id: set-env-live
-        if: startsWith(github.ref, 'refs/tags/live')
-        run: echo "value=live" >> $GITHUB_OUTPUT
-      - name: Set ENV for all other occasions (default to stage)
-        id: set-env-stage
-        if: ${{ !startsWith(github.ref, 'refs/tags/live') }}
-        run: echo "value=stage" >> $GITHUB_OUTPUT
-
-  # Get changes from cloud
-  # cloud-sync:
-  #   name: "Umbraco Cloud Sync"
-  #   uses: ./.github/workflows/cloud-sync.yml
-  #   secrets:
-  #     projectId: ${{ secrets.PROJECT_ID }}
-  #     umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
-  #   with:
-  #     targetEnvironmentAlias: ${{  env.TARGET_ENVIRONMENT_ALIAS }}
-
   # Pack and upload the deployment Artifact
   cloud-artifact:
     name: "Prepare and Upload Artifact"
