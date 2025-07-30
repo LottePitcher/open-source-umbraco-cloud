@@ -73,15 +73,15 @@ Now do the following updates to your repository:
 
 1. Copy all the .yml files from [here](.github/workflows) into the same folder location in your repo (.github\workflows)
 
-1. Update the `cloud-artifact` job in `main-v2.yml`:
+1. Update the 'cloud-artifact' job in `main-v2.yml`:
 
    - Set the `pathToWebsite` parameter
    - Set the `csProjFile` parameter
    - Set the `pathToFrontendClient` parameter (see ** Note below)
 
-1. Update the `cloud-deployment` job in `main-v2.yml`:
+1. Update the 'cloud-deployment' job in `main-v2.yml`:
 
-   - Set the `targetEnvironmentAlias` to the left-most main environment alias (check this in the Cloud Portal > Configuration > Advanced > Umbraco CI/CD Flow > CI/CD Environment Targets). Of course you may prefer to switch to use a Repository variable here.
+   - Set the `targetEnvironmentAlias` to alias of you left-most main environment (check this in the Cloud Portal > Configuration > Advanced > Umbraco CI/CD Flow > CI/CD Environment Targets). Of course you may prefer to use a Repository variable instead.
 
 1. In the root of your repository add the `cloud.zipignore` file that you can copy from [here](cloud.zipignore) 
  
@@ -90,7 +90,7 @@ Now do the following updates to your repository:
 1. Edit `cloud.gitignore` and remove the “CUSTOM rules” section that you added earlier
 
 > [!NOTE]
-> ** If you do NOT have a separate project which needs a npm build task then delete the `pathToFrontendClient` line, and update `cloud-artifact.yml` and delete the `Setup Node.js` and `Build frontend assets` steps.
+> ** If you do NOT have a separate project which needs a npm build task then delete the entire `pathToFrontendClient` line, then update `cloud-artifact.yml` and delete the steps called 'Setup Node.js' and 'Build frontend assets'.
 
 Now you have a GitHub Action that will push to Cloud whenever the `main` branch is updated, or when it’s manually triggered (via the GitHub website Actions tab). 
 
