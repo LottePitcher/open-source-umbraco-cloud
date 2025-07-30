@@ -5,9 +5,27 @@ on:
     branches:
       - main
       - v2-api
-    tags:
-      - live
+  release:
+    types: [published]
   workflow_dispatch: 
+
+jobs:
+  set-env:
+    name: "Set Target Environment from Release or Branch"
+    runs-on: ubuntu-latest
+    outputs:
+      targetEnv: ${{ steps.set-env.outputs.environment }}
+    steps:
+      - name: Set environment based on trigger
+        id: set-env
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            echo "Release published - deploying to live"
+            echo "environment=live" >> $GITHUB_OUTPUT
+          else
+            echo "Push to main or manual trigger - deploying to stage"
+            echo "environment=stage" >> $GITHUB_OUTPUT
+          fi
 
 jobs:
   set-env:
