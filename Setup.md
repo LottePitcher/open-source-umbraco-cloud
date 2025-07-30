@@ -3,6 +3,8 @@
 > [!IMPORTANT]
 > A quick Public Service Announcement before we start … please remember that you can’t just delete already committed sensitive data and make the repository public: that sensitive data will still be visible in the commit history! You knew this, right?! If you need to remove committed sensitive data, [GitHub has guidance on this](https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/removing-sensitive-data-from-a-repository).
 
+## Steps To Follow
+
 1. Switch on the Umbraco CI/CD Flow for the site in the Umbraco Cloud Portal:  
 
    - Configuration > Advanced > Umbraco CI/CD Flow - toggle to Activate  
@@ -95,15 +97,15 @@ We're using the Umbraco Deploy Import and Export features for this. There are in
 
 ## Version Upgrades
 
-You can configure Cloud to not do minor version updates automatically. Patch updates however will always be done automatically. If this happens your next deployment would fail as your Umbraco version is out of sync. The solution to this is to manually update your working repository to use the latest packages, test locally (of course!) and try another deployment.
+You can configure Cloud to NOT automatically do minor version updates. Patch updates however will always be done automatically. If this happens your next deployment would fail as your Umbraco version is out of sync. The solution to this is to manually update your working repository to use the latest packages, test locally (of course!) and try another deployment.
 
 > [!NOTE]
-> If you change the configuration of your environments via the Umbraco Cloud portal, Cloud will automatically update and commit those changes to the `umbraco-cloud.json` file. You must update your GitHub `UMBRACO_CLOUD_JSON` secret with the new value, otherwise future deployments will break!
+> If you change the configuration of your environments via the Umbraco Cloud portal, Cloud will automatically update and commit those changes to the `umbraco-cloud.json` file. You must update your GitHub `UMBRACO_CLOUD_JSON` secret value with the updated contents of that file, otherwise future deployments will break!
 
 ## A Final Disclaimer!
 
-The above all worked on my machine, your mileage may vary…
+The above all worked on our machines, your mileage may vary…
 
 As we are asking the community for feedback on this approach, things might have changed a bit since these instructions were posted. We’ll endeavour to keep them up-to-date as we go! Please raise an issue here if anything isn't clear or not working for you.
 
-If you want to message us about any of this, why not post a message in the \#contact-devrel channel in the [Umbraco Discord server](https://discord.umbraco.com) . We’ll see it!
+If you want to message us about any of this, why not post a message in the \#contact-devrel channel in the [Umbraco Discord server](https://discord.umbraco.com). Or if you'd prefer, you can send us a message via https://umbra.co/contact-devrel.

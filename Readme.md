@@ -4,9 +4,9 @@ I have an Umbraco (16) Cloud site running at https://opensourcecloud.lotte.dev. 
 
 I'm using this public GitHub repository as the "working" directory for that project: all development on the site should be done here, not committed directly to the Cloud git repo. There's a GitHub Action that gets everything it needs from GitHub Secrets to push to Cloud and update the live site!
 
-*BTW I've written [this blog post](https://dev.to/lottepitcher/open-sourcing-an-umbraco-cloud-site-mjj) explaining the background to this project*
+I've written [this blog post](https://dev.to/lottepitcher/open-sourcing-an-umbraco-cloud-site-mjj) explaining the background to this project and it's limitations.
 
-If you want to try it yourself then follow the steps defined in [Setup.md](Setup.md).
+If you want to try this on your own Umbraco Cloud site, then follow the instructions in [Setup.md](Setup.md).
 
 But first we'd love people to try running the site locally and contributing back - see the steps below. Would a workflow like this enable the community to contribute to the new Umbraco Community site that we're currently building on Cloud?
 
