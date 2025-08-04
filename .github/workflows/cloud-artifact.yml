@@ -116,3 +116,4 @@ jobs:
           -Description "Artifact for ${{github.run_number}}"
           -Version "${{github.run_number}}"
           -PipelineVendor GITHUB
+          -NoBuildAndRestore 1
