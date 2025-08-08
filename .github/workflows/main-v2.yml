@@ -30,6 +30,8 @@ jobs:
     with:
       artifactId: ${{ needs.cloud-artifact.outputs.artifactId }}
       targetEnvironmentAlias: stage
+      noBuildAndRestore: 1
     secrets:
       projectId: ${{ secrets.PROJECT_ID }}
+
       umbracoCloudApiKey: ${{ secrets.UMBRACO_CLOUD_API_KEY }}
