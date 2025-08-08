@@ -59,7 +59,7 @@ jobs:
           -ArtifactId ${{ inputs.artifactId }}
           -TargetEnvironmentAlias ${{ inputs.targetEnvironmentAlias }}
           -CommitMessage "Run number ${{github.run_number}}" 
-          -NoBuildAndRestore 1
+          -NoBuildAndRestore ${{ inputs.noBuildAndRestore }}
           -SkipVersionCheck ${{ inputs.skipVersionCheck }}
           -PipelineVendor GITHUB
 
